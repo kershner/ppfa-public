@@ -9,7 +9,7 @@ urlpatterns = [
         name="get_post_appointments"
     ),
     path('api/v1/appointments/<int:pk>',
-        views.GetDeleteUpdateMovie.as_view(),
-        name="get_delete_update_movie"
+        views.GetDeleteUpdateAppointments.as_view(),
+        name="get_delete_update_appointments"
     ),
 ]

@@ -6,15 +6,15 @@
 
 # Installation
     $ virtualenv -p python3 venv
-    $ source virtualenv/bin/activate
+    $ source venv/bin/activate
     $ pip install -e .
-    $ pip install -r
+    $ pip install -r requirements.txt
 
 # Run migrations and start app
     $ manage.py migrate
     $ manage.py runserver
 
-In a seperate terminal from the server:
+In a separate terminal from the server:
 
     $ manage.py test
 
@@ -35,7 +35,8 @@ You should see an error in the server terminal after running tests.
 1. Create a new branch from appointments (not master) called doctors
 2. Create a new app called 'doctors'
 
-    `$ manage.py startapp doctors`
+    `mkdir pp/doctors`
+    `$ manage.py startapp doctors pp/doctors`
 
 3. The doctor model should contain the following data:
     - Name
