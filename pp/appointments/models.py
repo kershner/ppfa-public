@@ -17,7 +17,7 @@ class Appointment(models.Model):
         (VACCINATION, 'Vaccination'),
     ]
 
-    phone_number_regex = RegexValidator(regex='\([1-9][\d]{2}\)[1-9][\d]{2}-[1-9][\d]{3}' message='Phone numbers must be in the format (xxx)xxx-xxxx')
+    phone_number_regex = RegexValidator(regex=r'\([1-9][\d]{2}\)[1-9][\d]{2}-[1-9][\d]{3}', message='Phone numbers must be in the format (xxx)xxx-xxxx')
 
     datetime = models.DateTimeField(null=False)
     reason = models.CharField(
@@ -27,4 +27,4 @@ class Appointment(models.Model):
         null=False
     )
     new_patient = models.BooleanField(null=False)
-    contact_phone_number = models.CharField(validators=[phone_regex], max_length=13)
+    contact_phone_number = models.CharField(validators=[phone_number_regex], max_length=13)
