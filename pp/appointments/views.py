@@ -4,7 +4,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from .serializers import AppointmentSerializer
 from .models import Appointment
 
-class GetDeleteUpdateMovie(RetrieveUpdateAPIView):
+class GetDeleteUpdateAppointments(RetrieveUpdateAPIView):
     serializer_class = AppointmentSerializer
 
     def get_queryset(self, pk):
