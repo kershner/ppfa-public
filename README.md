@@ -22,6 +22,8 @@ You should see an error in the server terminal after running tests.
 
 # Project requirements
 
+This project is meant to be completed in two hours or less. Submitting it partially complete is fine if you run out of time. And please provide feedback on the project if you have any.
+
 ## Part 1: Appointments REST endpoints
 1. create a new git branch called appoinments
 2. complete the serializers for appointments (in pp.appointments.serializers)
