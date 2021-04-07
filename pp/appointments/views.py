@@ -4,6 +4,7 @@ from .serializers import AppointmentSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Appointment
+from datetime import datetime
 
 
 class GetDeleteUpdateAppointments(RetrieveUpdateAPIView):
@@ -28,4 +29,29 @@ class GetDeleteUpdateAppointments(RetrieveUpdateAPIView):
 
 class GetPostAppointments(ListCreateAPIView):
     serializer_class = AppointmentSerializer
-    queryset = Appointment.objects.all()
+
+    def get_queryset(self):
+        queryset = Appointment.objects.all()
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
+
+        if start_date:
+            try:
+                start_date = datetime.strptime(start_date, '%m-%d-%Y')
+            except ValueError as e:
+                start_date = None
+
+        if end_date:
+            try:
+                end_date = datetime.strptime(end_date, '%m-%d-%Y')
+            except ValueError as e:
+                end_date = None
+
+        if start_date and end_date:
+            return queryset.filter(datetime__range=(start_date, end_date))
+        elif start_date:
+            return queryset.filter(datetime__gte=start_date)
+        elif end_date:
+            return queryset.filter(datetime__lte=end_date)
+
+        return queryset
