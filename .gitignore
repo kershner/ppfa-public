@@ -60,3 +60,4 @@ venv/
 
 *.sqlite3
 pp/doctors/migrations/
+pp/appointments/migrations/
