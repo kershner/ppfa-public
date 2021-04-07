@@ -38,4 +38,5 @@ class Doctor(models.Model):
         null=False
     )
 
-    appointments = models.ManyToManyField('appointments.Appointment', blank=True)
+    def __str__(self):
+        return '{}'.format(self.name)

@@ -1,5 +1,6 @@
-from django.db import models
 from django.core.validators import RegexValidator
+from pp.doctors.models import Doctor
+from django.db import models
 
 
 class Appointment(models.Model):
@@ -30,6 +31,8 @@ class Appointment(models.Model):
 
     datetime = models.DateTimeField(null=False)
     new_patient = models.BooleanField(null=False)
+
+    doctors = models.ManyToManyField(Doctor, blank=True)
 
     def __str__(self):
         return '{} appointment ID: {}'.format(self.get_reason_display(), self.pk)
