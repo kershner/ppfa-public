@@ -59,3 +59,4 @@ target/
 venv/
 
 *.sqlite3
+pp/doctors/migrations/
