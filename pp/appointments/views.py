@@ -2,9 +2,11 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from django.shortcuts import get_object_or_404
 from .serializers import AppointmentSerializer
 from rest_framework.response import Response
+from datetime import datetime, timedelta
+from pp.doctors.models import Doctor
+from django.utils import timezone
 from rest_framework import status
 from .models import Appointment
-from datetime import datetime
 
 
 class GetDeleteUpdateAppointments(RetrieveUpdateAPIView):
@@ -55,3 +57,21 @@ class GetPostAppointments(ListCreateAPIView):
             return queryset.filter(datetime__lte=end_date)
 
         return queryset
+
+    def post(self, request):
+        if 'doctors' in request.data:
+            doctors = Doctor.objects.filter(id__in=request.data['doctors']).all()
+            doctors_appointments = Appointment.objects.filter(doctors__in=doctors).all()
+            appointment_date = (datetime.strptime(request.data['datetime'], '%Y-%m-%dT%H:%M')).replace(tzinfo=timezone.utc)
+            thirty_minutes_before = (appointment_date - timedelta(minutes=30)).replace(tzinfo=timezone.utc)
+            thirty_minutes_after = (appointment_date + timedelta(minutes=30)).replace(tzinfo=timezone.utc)
+            existing_appointments = doctors_appointments.filter(datetime__range=(thirty_minutes_before,
+                                                                                 thirty_minutes_after)).first()
+            if existing_appointments:
+                return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        serializer = AppointmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
