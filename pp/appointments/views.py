@@ -1,34 +1,31 @@
-from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
-
+from django.shortcuts import get_object_or_404
 from .serializers import AppointmentSerializer
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Appointment
 
+
 class GetDeleteUpdateAppointments(RetrieveUpdateAPIView):
-    serializer_class = AppointmentSerializer
-
-    def get_queryset(self, pk):
-        pass
-
     def get(self, request, pk):
-        pass
+        appointment = get_object_or_404(Appointment, pk=pk)
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data)
 
-    def post(self, request, pk):
-        pass
+    def put(self, request, pk):
+        appointment = get_object_or_404(Appointment, pk=pk)
+        serializer = AppointmentSerializer(appointment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        pass
+        appointment = Appointment.objects.get(pk=pk)
+        appointment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class GetPostAppointments(ListCreateAPIView):
     serializer_class = AppointmentSerializer
-
-    def get_queryset(self):
-        pass
-
-    def get(self, request):
-        pass
-
-    def post(self, request):
-        pass
-
-    
+    queryset = Appointment.objects.all()
